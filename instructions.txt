@@ -1,0 +1,51 @@
+To use this script place it in the directory which is the root of all other subdirectories you want to handle your files.
+
+For example, consider this file structure:
+
+__Downloads
+  |__Pictures
+  |  |__2019
+  |  |  |__Holiday
+  |  |  |  |__holiday1.jpg
+  |  |  |  |__holiday2.jpg
+  |  |  |  
+  |  |  |__Vacation
+  |  |  |  |__vacation1.jpg
+  |  |  |
+  |  |  |__pic1.jpg
+  |  |  |__pic2.jpg
+  |  |  |__pic3.jpg
+  |  |  
+  |  |__2020
+  |  |  |__photo1.png
+  |  |
+  |  |__2021
+  |     |__photo1.jpeg
+  |     |__photo2.jpeg
+  |
+  |__Movies
+     |__MyMovie1
+     |  |__someMovie1.mp4
+     |  |__subs1.srt
+     |
+     |__MyMovie2
+        |__someMovie2.mp4
+
+If you want to handle all files in Pictures directory and its subdirectories you need to place files_handler.py in the Pictures folder.
+
+If you want to handle files in 2019 directory and its subdirectories, place files_handler.py in that directory.
+
+Features:
+
+1. Indexing files
+If you want to put indexes (numbers from 01 to eternity) this option makes it possible. 
+First you need to choose which filetype you want to index, and then the script will do the rest
+
+2. Removing specific string from the file name
+In this option you need to provide a piece of text you want to remove from your file name. So, if you have a lot of downloaded files from some web page that have its name embedded in the file name, this is an excellent way to remove it
+
+3. Add piece of text at the beginning of the file name
+Sometimes, when you want to rename lots of pictures in a directory with a specific timestamp or similar, this is a good way to achieve this
+
+4. Delete files from directories
+Self-explanatory.
