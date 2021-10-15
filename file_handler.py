@@ -5,24 +5,71 @@ def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
+slash = '\\' if os.name == 'nt' else '/'
+
+
 # remove unwanted string from a filename
-def remove_string_from_filename():
-    global renamed_files
-    # piece of string that is going to be removed from filename
+def remove_string():
+    renamed_files = 0
+    # piece of string that is going to be removed
     unwanted_string = input(
         'Type or paste piece of text you want to remove from file name\n--> ')
 
-    for root, subdirectories, files in os.walk(path):
+    exclude_prefixes = ('__', '.')
+    for root, dirs, files in os.walk(full_path):
+        # exclude files that start with .
+        files = [f for f in files if not f[0].startswith(exclude_prefixes)]
+        # exclude all dirs starting with exclude_prefixes
+        dirs[:] = [d for d in dirs if not d.startswith(
+            exclude_prefixes)]
         # print(os.path.join(root.split('/')[-1]))
-        for index, file in enumerate(files):
+        for file in files:
             # print(os.path.join(file))
             file_name = os.path.join(file)
             if unwanted_string in file_name:
                 renamed_file_name = file_name.replace(unwanted_string, "")
-                os.rename(root + '/' + file, root + '/' + renamed_file_name)
+                os.rename(root + slash + file,
+                          root + slash + renamed_file_name)
 
                 print(
-                    f'--> File "{file_name}"\n\tis renamed to\n\t"{renamed_file_name}"\n')
+                    f'--> File "{file_name}"\n\tis renamed to\n\t"'
+                    f'{renamed_file_name}"\n')
+                renamed_files += 1
+
+    overall = f'Total renamed items: {renamed_files}'
+    print(overall)
+
+
+# add string at the beginning of the filename
+def add_string_at_start():
+    renamed_files = 0
+
+    filetype = input(
+        'Type the exact file extension you want to add string to\n(example: '
+        'mp3, jpg, '
+        'txt, pdf, html... )\n--> ')
+    # piece of string that is going to be added
+    add_string = input(
+        'Type or paste piece of text you want to add at the filename '
+        'beginning\n--> ')
+
+    exclude_prefixes = ('__', '.')
+    for root, dirs, files in os.walk(full_path):
+        # exclude files that start with .
+        files = [f for f in files if not f[0].startswith(exclude_prefixes)]
+        # exclude all dirs starting with exclude_prefixes
+        dirs[:] = [d for d in dirs if not d.startswith(
+            exclude_prefixes)]
+        for file in files:
+            file_name = os.path.join(file)
+
+            if file_name.endswith(f'.{filetype}'):
+                renamed_file_name = add_string + file_name
+                os.rename(root + slash + file, root + slash + renamed_file_name)
+
+                print(
+                    f'--> File "{file_name}"\n\tis renamed to\n\t"'
+                    f'{renamed_file_name}"\n')
                 renamed_files += 1
 
     overall = f'Total renamed items: {renamed_files}'
@@ -31,21 +78,29 @@ def remove_string_from_filename():
 
 # index specific files in a directory
 def index_file():
-    global renamed_files
-    global file_index
+    renamed_files = 0
 
     filetype = input(
-        'Type the exact file extension you want to index\n(example: mp3, jpg, txt, pdf, html... )\n--> ')
+        'Type the exact file extension you want to index\n(example: mp3, jpg, '
+        'txt, pdf, html... )\n--> ')
 
-    for root, subdirectories, files in os.walk(path):
-        for index, file in enumerate(files):
+    exclude_prefixes = ('__', '.')
+    for root, dirs, files in os.walk(full_path):
+        # exclude files that start with .
+        files = [f for f in files if not f[0].startswith(exclude_prefixes)]
+        # exclude all dirs starting with exclude_prefixes
+        dirs[:] = [d for d in dirs if not d.startswith(
+            exclude_prefixes)]
+        file_index = 1
+        for file in files:
             file_name = os.path.join(file)
             if file_name.endswith(f'.{filetype}'):
                 index_number = str(file_index).zfill(2) + ' - '
-                os.rename(root + '/' + file, root +
-                          '/' + index_number + file_name)
+                os.rename(root + slash + file, root +
+                          slash + index_number + file_name)
                 print(
-                    f'--> File "{file_name}"\n\tis indexed as\n\t"{index_number}{file_name}"\n')
+                    f'--> File "{file_name}"\n\tis indexed as\n\t"'
+                    f'{index_number}{file_name}"\n')
 
                 renamed_files += 1
                 file_index += 1
@@ -56,15 +111,22 @@ def index_file():
 
 # delete files with given file type
 def delete_file():
-    global deleted_files
+    deleted_files = 0
 
     filetype = input(
-        'Type the exact file extension for files you want to delete\n(example: mp3, jpg, txt, pdf, html...)\n--> ')
+        'Type the exact file extension for files you want to delete\n('
+        'example: mp3, jpg, txt, pdf, html...)\n--> ')
 
-    for root, subdirectories, files in os.walk(path):
-        for index, file in enumerate(files):
+    exclude_prefixes = ('__', '.')
+    for root, dirs, files in os.walk(full_path):
+        # exclude files that start with .
+        files = [f for f in files if not f[0].startswith(exclude_prefixes)]
+        # exclude all dirs starting with exclude_prefixes
+        dirs[:] = [d for d in dirs if not d.startswith(
+            exclude_prefixes)]
+        for file in files:
             if file.endswith(f'.{filetype}'):
-                os.remove(os.path.join(root + '/', file))
+                os.remove(os.path.join(root + slash, file))
 
                 print(f'--> Deleted file "{file}"\n')
                 deleted_files += 1
@@ -73,33 +135,29 @@ def delete_file():
     print(overall)
 
 
-# list directory without hidden files
-def listdir_nohidden(path):
-    for file in os.listdir(path):
-        if not file.startswith('.'):
-            yield file
-
-
 clear()
 
 print('Choose an option:')
-option = int(input('1. Index files (add numbers at the beginning of each file of filetype you choose)\n2. Remove specific text from filename\n3. Delete files with specific filetypes of your choice\n--> '))
+features = [
+    '1. Index files (add numbers at the beginning of each file of filetype '
+    'you choose)',
+    '2. Remove specific text from filename',
+    '3. Add text at the beginning of the filename',
+    '4. Delete files with specific filetypes of your choice']
+for i in range(len(features)):
+    print(features[i])
+option = int(input('--> '))
 
 # get the directory where the python script is located
-path = os.path.dirname(os.path.realpath(__file__)) + '/'
-# convert a function to a list
-files = list(listdir_nohidden(path))
-# for indexing specific file types in a directory
-file_index = 1
-# number of overall deleted and renamed files
-deleted_files = 0
-renamed_files = 0
+full_path = os.path.dirname(os.path.realpath(__file__)) + slash
 
 if option == 1:
     index_file()
 elif option == 2:
-    remove_string_from_filename()
+    remove_string()
 elif option == 3:
+    add_string_at_start()
+elif option == 4:
     delete_file()
 else:
     print('You didn\'t choose any of the given options.')
