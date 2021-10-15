@@ -17,7 +17,7 @@ def remove_string():
 
     exclude_prefixes = ('__', '.')
     for root, dirs, files in os.walk(full_path):
-        # exclude files that start with .
+        # exclude all files starting with exclude_prefixes
         files = [f for f in files if not f[0].startswith(exclude_prefixes)]
         # exclude all dirs starting with exclude_prefixes
         dirs[:] = [d for d in dirs if not d.startswith(
