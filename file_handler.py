@@ -55,9 +55,7 @@ def add_string_at_start():
 
     exclude_prefixes = ('__', '.')
     for root, dirs, files in os.walk(full_path):
-        # exclude files that start with .
         files = [f for f in files if not f[0].startswith(exclude_prefixes)]
-        # exclude all dirs starting with exclude_prefixes
         dirs[:] = [d for d in dirs if not d.startswith(
             exclude_prefixes)]
         for file in files:
@@ -86,9 +84,7 @@ def index_file():
 
     exclude_prefixes = ('__', '.')
     for root, dirs, files in os.walk(full_path):
-        # exclude files that start with .
         files = [f for f in files if not f[0].startswith(exclude_prefixes)]
-        # exclude all dirs starting with exclude_prefixes
         dirs[:] = [d for d in dirs if not d.startswith(
             exclude_prefixes)]
         file_index = 1
@@ -119,9 +115,7 @@ def delete_file():
 
     exclude_prefixes = ('__', '.')
     for root, dirs, files in os.walk(full_path):
-        # exclude files that start with .
         files = [f for f in files if not f[0].startswith(exclude_prefixes)]
-        # exclude all dirs starting with exclude_prefixes
         dirs[:] = [d for d in dirs if not d.startswith(
             exclude_prefixes)]
         for file in files:
